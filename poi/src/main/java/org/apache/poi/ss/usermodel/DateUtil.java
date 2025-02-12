@@ -719,24 +719,26 @@ public class DateUtil {
      * @see #isADateFormat(int, java.lang.String)
      */
     public static boolean isInternalDateFormat(int format) {
-            switch(format) {
-                // Internal Date Formats as described on page 427 in
-                // Microsoft Excel Dev's Kit...
-                case 0x0e:
-                case 0x0f:
-                case 0x10:
-                case 0x11:
-                case 0x12:
-                case 0x13:
-                case 0x14:
-                case 0x15:
-                case 0x16:
-                case 0x2d:
-                case 0x2e:
-                case 0x2f:
-                    return true;
-            }
-       return false;
+        switch(format) {
+            // Internal Date Formats as described on page 427 in
+            // Microsoft Excel Dev's Kit...
+            // see also javadoc in org.apache.poi.ss.usermodel.BuiltinFormats
+            case 0x0e:
+            case 0x0f:
+            case 0x10:
+            case 0x11:
+            case 0x12:
+            case 0x13:
+            case 0x14:
+            case 0x15:
+            case 0x16:
+            // the 0x2d to 0x2f formats are time (only) formats
+            case 0x2d:
+            case 0x2e:
+            case 0x2f:
+                return true;
+        }
+        return false;
     }
 
     /**
