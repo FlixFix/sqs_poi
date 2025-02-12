@@ -811,7 +811,6 @@ public class DateUtil {
      * @return true if valid
      * @param  value the double value
      */
-
     public static boolean isValidExcelDate(double value)
     {
         return (value > -Double.MIN_VALUE);
