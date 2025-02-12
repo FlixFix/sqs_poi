@@ -409,7 +409,7 @@ public final class CellUtil {
                 switch (copyCellType) {
                     case NUMERIC:
                         // DataFormat is not copied unless policy.isCopyCellStyle is true
-                        if (DateUtil.isCellDateFormatted(srcCell)) {
+                        if (!policy.isCopyCellStyle() && DateUtil.isCellDateFormatted(srcCell)) {
                             destCell.setCellValue(srcCell.getDateCellValue());
                         } else {
                             destCell.setCellValue(srcCell.getNumericCellValue());
