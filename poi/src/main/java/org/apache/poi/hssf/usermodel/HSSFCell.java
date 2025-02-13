@@ -271,7 +271,7 @@ public class HSSFCell extends CellBase {
      *
      */
 
-    private void setCellType(CellType cellType, boolean setValue, int row,short col, short styleIndex)
+    private void setCellType(CellType cellType, boolean setValue, int row, short col, short styleIndex)
     {
         switch (cellType)
         {
