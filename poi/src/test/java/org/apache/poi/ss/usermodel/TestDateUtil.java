@@ -718,8 +718,9 @@ class TestDateUtil {
     void timeOnly() {
         final double d = 22.0 / 24.0; // 22:00 (10pm)
         final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ", LocaleUtil.getUserLocale());
+        sdf.setTimeZone(LocaleUtil.getUserTimeZone());
         final Date date = DateUtil.getJavaDate(d, false);
-        assertEquals("1899-12-31T23:00:00.000+0100", sdf.format(date));
+        assertEquals("1899-12-31T22:00:00.000+0000", sdf.format(date));
 
         final Date date1904 = DateUtil.getJavaDate(d, true);
         assertEquals("1904-01-01T22:00:00.000+0000", sdf.format(date1904));
