@@ -340,6 +340,10 @@ public abstract class BaseTestCell {
         }
     }
 
+    protected boolean enableDateTest() {
+        return true;
+    }
+
     /**tests the toString() method of HSSFCell*/
     @Test
     void testToString() throws Exception {
@@ -373,7 +377,9 @@ public abstract class BaseTestCell {
             assertEquals("", r.getCell(6).toString(), "Blank");
             // toString on a date-formatted cell displays dates as dd-MMM-yyyy, which has locale problems with the month
             String dateCell1 = r.getCell(7).toString();
-            assertEquals("2/2/10 0:00", dateCell1);
+            if (enableDateTest()) {
+                assertEquals("2/2/10 0:00", dateCell1);
+            }
 
             //Write out the file, read it in, and then check cell values
             try (Workbook wb2 = _testDataProvider.writeOutAndReadBack(wb1)) {
@@ -386,7 +392,9 @@ public abstract class BaseTestCell {
                 assertEquals("A1+B1", r.getCell(5).toString(), "Formula");
                 assertEquals("", r.getCell(6).toString(), "Blank");
                 String dateCell2 = r.getCell(7).toString();
-                assertEquals(dateCell1, dateCell2, "Date");
+                if (enableDateTest()) {
+                    assertEquals(dateCell1, dateCell2, "Date");
+                }
             }
         }
     }
