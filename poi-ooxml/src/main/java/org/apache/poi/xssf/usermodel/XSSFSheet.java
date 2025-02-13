@@ -2900,7 +2900,6 @@ public class XSSFSheet extends POIXMLDocumentPart implements Sheet, OoxmlSheetEx
         dsv.setZoomScale(scale);
     }
 
-
     /**
      * copyRows rows from srcRows to this sheet starting at destStartRow
      *
@@ -2916,6 +2915,27 @@ public class XSSFSheet extends POIXMLDocumentPart implements Sheet, OoxmlSheetEx
      */
     @Beta
     public void copyRows(List<? extends Row> srcRows, int destStartRow, CellCopyPolicy policy) {
+        copyRows(srcRows, destStartRow, policy, new CellCopyContext());
+    }
+
+    /**
+     * copyRows rows from srcRows to this sheet starting at destStartRow
+     *
+     * Additionally copies merged regions that are completely defined in these
+     * rows (ie. merged 2 cells on a row to be shifted).
+     * @param srcRows the rows to copy. Formulas will be offset by the difference
+     * in the row number of the first row in srcRows and destStartRow (even if srcRows
+     * are from a different sheet).
+     * @param destStartRow the row in this sheet to paste the first row of srcRows
+     * the remainder of srcRows will be pasted below destStartRow per the cell copy policy
+     * @param policy is the cell copy policy, which can be used to merge the source and destination
+     * when the source is blank, copy styles only, paste as value, etc
+     * @param context the context - see {@link CellCopyContext}
+     * @since POI 5.4.1
+     */
+    @Beta
+    public void copyRows(List<? extends Row> srcRows, int destStartRow,
+                         CellCopyPolicy policy, CellCopyContext context) {
         if (srcRows == null || srcRows.isEmpty()) {
             throw new IllegalArgumentException("No rows to copy");
         }
@@ -2972,7 +2992,7 @@ public class XSSFSheet extends POIXMLDocumentPart implements Sheet, OoxmlSheetEx
             }
             //removeRow(destRowNum); //this probably clears all external formula references to destRow, causing unwanted #REF! errors
             final XSSFRow destRow = createRow(destRowNum);
-            destRow.copyRowFrom(srcRow, options);
+            destRow.copyRowFrom(srcRow, options, context);
         }
 
         // ======================
@@ -3008,8 +3028,27 @@ public class XSSFSheet extends POIXMLDocumentPart implements Sheet, OoxmlSheetEx
      */
     @Beta
     public void copyRows(int srcStartRow, int srcEndRow, int destStartRow, CellCopyPolicy cellCopyPolicy) {
+        copyRows(srcStartRow, srcEndRow, destStartRow, cellCopyPolicy, new CellCopyContext());
+    }
+
+    /**
+     * Copies rows between srcStartRow and srcEndRow to the same sheet, starting at destStartRow
+     * Convenience function for {@link #copyRows(List, int, CellCopyPolicy, CellCopyContext)}
+     *
+     * Equivalent to copyRows(getRows(srcStartRow, srcEndRow, false), destStartRow, cellCopyPolicy)
+     *
+     * @param srcStartRow the index of the first row to copy the cells from in this sheet
+     * @param srcEndRow the index of the last row to copy the cells from in this sheet
+     * @param destStartRow the index of the first row to copy the cells to in this sheet
+     * @param cellCopyPolicy the policy to use to determine how cells are copied
+     * @param context the context - see {@link CellCopyContext}
+     * @since POI 5.4.1
+     */
+    @Beta
+    public void copyRows(int srcStartRow, int srcEndRow, int destStartRow,
+                         CellCopyPolicy cellCopyPolicy, CellCopyContext context) {
         final List<XSSFRow> srcRows = getRows(srcStartRow, srcEndRow, false); //FIXME: should be false, no need to create rows where src is only to copy them to dest
-        copyRows(srcRows, destStartRow, cellCopyPolicy);
+        copyRows(srcRows, destStartRow, cellCopyPolicy, context);
     }
 
     /**
