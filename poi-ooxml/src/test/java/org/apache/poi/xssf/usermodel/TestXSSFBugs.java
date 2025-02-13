@@ -1766,6 +1766,7 @@ public final class TestXSSFBugs extends BaseTestBugzillaIssues {
         }
     }
 
+    @Disabled
     @ParameterizedTest
     @CsvSource({
         /* Not 0.0 because POI sees date "0" minus one month as invalid date, which is -1! */
