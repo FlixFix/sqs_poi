@@ -220,8 +220,12 @@ public class DateUtil {
         return internalGetExcelDate(year, dayOfYear, hour, minute, second, milliSecond, use1904windowing);
     }
 
+    private static boolean isLastDay1899(final int year, final int dayOfYear) {
+        return year == 1899 && dayOfYear == 365;
+    }
+
     private static double internalGetExcelDate(int year, int dayOfYear, int hour, int minute, int second, int milliSecond, boolean use1904windowing) {
-        if ((!use1904windowing && year < 1900) ||
+        if ((!use1904windowing && (year < 1900 && !isLastDay1899(year, dayOfYear))) ||
             (use1904windowing && year < 1904))
         {
             return BAD_DATE;
@@ -866,7 +870,7 @@ public class DateUtil {
 
     static int daysInPriorYears(int yr, boolean use1904windowing)
     {
-        if ((!use1904windowing && yr < 1900) || (use1904windowing && yr < 1904)) {
+        if ((!use1904windowing && yr < 1899) || (use1904windowing && yr < 1904)) {
             throw new IllegalArgumentException("'year' must be 1900 or greater");
         }
 
