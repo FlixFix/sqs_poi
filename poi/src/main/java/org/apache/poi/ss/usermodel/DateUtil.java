@@ -727,6 +727,7 @@ public class DateUtil {
             case 0x0f:
             case 0x10:
             case 0x11:
+            // the 0x12 to 0x15 formats are time (only) formats
             case 0x12:
             case 0x13:
             case 0x14:
