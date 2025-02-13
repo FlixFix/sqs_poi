@@ -17,8 +17,6 @@
 
 package org.apache.poi.xssf.usermodel;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.Date;
@@ -51,7 +49,6 @@ import org.apache.poi.ss.util.CellUtil;
 import org.apache.poi.util.Beta;
 import org.apache.poi.util.ExceptionUtil;
 import org.apache.poi.util.Internal;
-import org.apache.poi.util.LocaleUtil;
 import org.apache.poi.xssf.model.CalculationChain;
 import org.apache.poi.xssf.model.SharedStringsTable;
 import org.apache.poi.xssf.model.StylesTable;
@@ -779,6 +776,7 @@ public final class XSSFCell extends CellBase {
 
         return _cell.getV();
     }
+
     /**
      * Get the value of the cell as an error code.
      * <p>
@@ -926,6 +924,8 @@ public final class XSSFCell extends CellBase {
         }
     }
 
+    private static final DataFormatter DATA_FORMATTER = new DataFormatter();
+
     /**
      * Returns a string representation of the cell
      * <p>
@@ -938,14 +938,8 @@ public final class XSSFCell extends CellBase {
     public String toString() {
         switch (getCellType()) {
             case NUMERIC:
-                if (DateUtil.isCellDateFormatted(this)) {
-                    DateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy", LocaleUtil.getUserLocale());
-                    sdf.setTimeZone(LocaleUtil.getUserTimeZone());
-                    return sdf.format(getDateCellValue());
-                }
-                return Double.toString(getNumericCellValue());
             case STRING:
-                return getRichStringCellValue().toString();
+                return DATA_FORMATTER.formatCellValue(this);
             case FORMULA:
                 return getCellFormula();
             case BLANK:

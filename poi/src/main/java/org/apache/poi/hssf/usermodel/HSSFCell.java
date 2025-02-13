@@ -17,7 +17,6 @@
 
 package org.apache.poi.hssf.usermodel;
 
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.Date;
@@ -48,6 +47,7 @@ import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.CellValue;
 import org.apache.poi.ss.usermodel.Comment;
+import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.ss.usermodel.FormulaError;
 import org.apache.poi.ss.usermodel.Hyperlink;
@@ -55,7 +55,6 @@ import org.apache.poi.ss.usermodel.RichTextString;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.ss.util.CellReference;
 import org.apache.poi.ss.util.NumberToTextConverter;
-import org.apache.poi.util.LocaleUtil;
 
 /**
  * High level representation of a cell in a row of a spreadsheet.
@@ -1021,6 +1020,8 @@ public class HSSFCell extends CellBase {
         _sheet.getSheet().setActiveCellCol(col);
     }
 
+    private static final DataFormatter DATA_FORMATTER = new DataFormatter();
+
     /**
      * Returns a string representation of the cell
      *
@@ -1038,21 +1039,14 @@ public class HSSFCell extends CellBase {
             case BLANK:
                 return "";
             case BOOLEAN:
-                return getBooleanCellValue()?"TRUE":"FALSE";
+                return getBooleanCellValue() ? "TRUE" : "FALSE";
             case ERROR:
                 return ErrorEval.getText((( BoolErrRecord ) _record).getErrorValue());
             case FORMULA:
                 return getCellFormula();
             case NUMERIC:
-                //TODO apply the dataformat for this cell
-                if (DateUtil.isCellDateFormatted(this)) {
-                    SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy", LocaleUtil.getUserLocale());
-                    sdf.setTimeZone(LocaleUtil.getUserTimeZone());
-                    return sdf.format(getDateCellValue());
-                }
-                return  String.valueOf(getNumericCellValue());
             case STRING:
-                return getStringCellValue();
+                return DATA_FORMATTER.formatCellValue(this);
             default:
                 return "Unknown Cell Type: " + getCellType();
         }

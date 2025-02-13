@@ -47,6 +47,8 @@ import org.apache.poi.ss.SpreadsheetVersion;
 import org.apache.poi.ss.formula.eval.NotImplementedException;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.util.LocaleUtil;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -56,6 +58,7 @@ import org.junit.jupiter.api.Test;
 @SuppressWarnings("deprecation")
 public abstract class BaseTestCell {
 
+    protected static TimeZone userTimeZone;
     protected final ITestDataProvider _testDataProvider;
 
     /**
@@ -63,6 +66,19 @@ public abstract class BaseTestCell {
      */
     protected BaseTestCell(ITestDataProvider testDataProvider) {
         _testDataProvider = testDataProvider;
+    }
+
+    @BeforeAll
+    public static void setTimeZone() {
+        userTimeZone = LocaleUtil.getUserTimeZone();
+        LocaleUtil.setUserTimeZone(TimeZone.getTimeZone("CET"));
+        LocaleUtil.setUserLocale(Locale.US);
+    }
+
+    @AfterAll
+    public static void resetTimeZone() {
+        LocaleUtil.setUserTimeZone(userTimeZone);
+        LocaleUtil.setUserLocale(Locale.ROOT);
     }
 
     @Test
@@ -357,9 +373,7 @@ public abstract class BaseTestCell {
             assertEquals("", r.getCell(6).toString(), "Blank");
             // toString on a date-formatted cell displays dates as dd-MMM-yyyy, which has locale problems with the month
             String dateCell1 = r.getCell(7).toString();
-            assertTrue(dateCell1.startsWith("02-"), "Date (Day)");
-            assertTrue(dateCell1.endsWith("-2010"), "Date (Year)");
-
+            assertEquals("2/2/10 0:00", dateCell1);
 
             //Write out the file, read it in, and then check cell values
             try (Workbook wb2 = _testDataProvider.writeOutAndReadBack(wb1)) {
