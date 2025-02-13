@@ -856,31 +856,24 @@ public class DateUtil {
      * @throws IllegalArgumentException if date is invalid
      */
     private static int absoluteDay(int year, int dayOfYear, boolean use1904windowing) {
-        return dayOfYear + daysInPriorYears(year, use1904windowing);
+        return dayOfYear + daysInPriorYears(year, dayOfYear, use1904windowing);
     }
 
-    /**
-     * Return the number of days in prior years since 1900
-     *
-     * @return    days  number of days in years prior to yr.
-     * @param     yr    a year (1900 < yr < 4000)
-     * @param use1904windowing Should 1900 or 1904 date windowing be used?
-     * @throws IllegalArgumentException if year is outside of range.
-     */
-
-    static int daysInPriorYears(int yr, boolean use1904windowing)
+    private static int daysInPriorYears(final int year, final int dayOfYear,
+                                        final boolean use1904windowing)
     {
-        if ((!use1904windowing && yr < 1899) || (use1904windowing && yr < 1904)) {
+        if ((!use1904windowing && (year < 1900 && !isLastDay1899(year, dayOfYear)))
+                || (use1904windowing && year < 1904)) {
             throw new IllegalArgumentException("'year' must be 1900 or greater");
         }
 
-        int yr1  = yr - 1;
+        int yr1  = year - 1;
         int leapDays =   yr1 / 4   // plus julian leap days in prior years
                        - yr1 / 100 // minus prior century years
                        + yr1 / 400 // plus years divisible by 400
                        - 460;      // leap days in previous 1900 years
 
-        return 365 * (yr - (use1904windowing ? 1904 : 1900)) + leapDays;
+        return 365 * (year - (use1904windowing ? 1904 : 1900)) + leapDays;
     }
 
     // set HH:MM:SS fields of cal to 00:00:00:000

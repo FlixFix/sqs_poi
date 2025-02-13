@@ -505,7 +505,7 @@ class TestDateUtil {
         Date date32 = df.parse("1900-02-01");
         assertEquals(32.0, DateUtil.getExcelDate(date32), 0.00001);
         assertEquals(32.0, DateUtil.getExcelDate(DateUtil.toLocalDateTime(date32)), 0.00001);
-        Date dateMinus1 = df.parse("1899-12-31");
+        Date dateMinus1 = df.parse("1899-12-30");
         assertEquals(/* BAD_DATE! */ -1.0, DateUtil.getExcelDate(dateMinus1), 0.00001);
         assertEquals(/* BAD_DATE! */ -1.0, DateUtil.getExcelDate(DateUtil.toLocalDateTime(dateMinus1)), 0.00001);
     }
