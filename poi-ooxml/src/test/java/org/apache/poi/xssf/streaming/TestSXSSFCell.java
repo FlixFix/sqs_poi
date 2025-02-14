@@ -169,9 +169,4 @@ class TestSXSSFCell extends BaseTestXCell {
     @Disabled
     protected void setCellType_FORMULA_onAnArrayFormulaCell_doesNothing() {
     }
-
-    @Override
-    protected boolean enableDateTest() {
-        return false;
-    }
 }
