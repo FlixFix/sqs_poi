@@ -1766,11 +1766,9 @@ public final class TestXSSFBugs extends BaseTestBugzillaIssues {
         }
     }
 
-    @Disabled
     @ParameterizedTest
     @CsvSource({
-        /* Not 0.0 because POI sees date "0" minus one month as invalid date, which is -1! */
-        "56688_1.xlsx, -1.0",
+        "56688_1.xlsx, 0.0",
         "56688_2.xlsx, #VALUE!",
         "56688_3.xlsx, #VALUE!",
         "56688_4.xlsx, date"
