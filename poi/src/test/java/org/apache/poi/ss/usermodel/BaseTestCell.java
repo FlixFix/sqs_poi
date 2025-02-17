@@ -1422,6 +1422,22 @@ public abstract class BaseTestCell {
     }
 
     @Test
+    void testZeroDate() throws IOException {
+        try (Workbook wb = _testDataProvider.createWorkbook()) {
+            Cell cellA1 = getInstance(wb);
+            cellA1.setCellValue(1.0);
+            assertEquals(LocalDate.parse("1900-01-01"),
+                    cellA1.getLocalDateTimeCellValue().toLocalDate());
+
+            cellA1.setCellValue(0.0);
+            // this value is not strictly correct but our time only support relies on this
+            // time only means cells that have values with just times but no date parts
+            assertEquals(LocalDate.parse("1899-12-31"),
+                    cellA1.getLocalDateTimeCellValue().toLocalDate());
+        }
+    }
+
+    @Test
     protected void setCellType_FORMULA_onAnArrayFormulaCell_doesNothing() throws IOException {
         try (Workbook wb = _testDataProvider.createWorkbook()) {
             Cell cell = getInstance(wb);
