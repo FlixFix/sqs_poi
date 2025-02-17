@@ -33,6 +33,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.ZoneOffset;
 import java.util.Calendar;
 import java.util.Date;
@@ -1434,6 +1435,11 @@ public abstract class BaseTestCell {
             // time only means cells that have values with just times but no date parts
             assertEquals(LocalDate.parse("1899-12-31"),
                     cellA1.getLocalDateTimeCellValue().toLocalDate());
+
+            cellA1.setCellValue(0.5);
+            assertEquals(LocalTime.parse("12:00"),
+                    cellA1.getLocalDateTimeCellValue().toLocalTime());
+
         }
     }
 
