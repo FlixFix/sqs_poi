@@ -359,6 +359,13 @@ public class XWPFRun implements ISDTContents, IRunElement, CharacterRun {
     }
 
     /**
+     * Returns number of text element
+     */
+    public int getNumberOfTexts() {
+        return run.sizeOfTArray();
+    }
+
+    /**
      * Return the string content of this text run
      *
      * @return the text of this text run or {@code null} if not set

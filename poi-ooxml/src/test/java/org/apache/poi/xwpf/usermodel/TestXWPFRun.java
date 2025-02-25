@@ -901,4 +901,12 @@ class TestXWPFRun {
             }
         }
     }
+
+    @Test
+    void testGetNumberOfTexts() {
+        XWPFRun run = p.createRun();
+        assertEquals(0, run.getNumberOfTexts());
+        run.setText("TEST STRING");
+        assertEquals(1, run.getNumberOfTexts());
+    }
 }
