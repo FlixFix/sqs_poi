@@ -104,6 +104,7 @@ public class XSSFSheet extends POIXMLDocumentPart implements Sheet, OoxmlSheetEx
     private final XSSFDataValidationHelper dataValidationHelper;
     private XSSFVMLDrawing xssfvmlDrawing;
     private CellRangeAddress dimensionOverride;
+    private double arbitraryExtraWidth = 0.0;
 
     /**
      * Creates new XSSFSheet   - called by XSSFWorkbook to create a sheet from scratch.
@@ -498,6 +499,7 @@ public class XSSFSheet extends POIXMLDocumentPart implements Sheet, OoxmlSheetEx
 
         if (width != -1) {
             width *= 256;
+            width += arbitraryExtraWidth;
             int maxColumnWidth = 255*256; // The maximum column width for an individual cell is 255 characters
             if (width > maxColumnWidth) {
                 width = maxColumnWidth;
@@ -505,6 +507,30 @@ public class XSSFSheet extends POIXMLDocumentPart implements Sheet, OoxmlSheetEx
             setColumnWidth(column, Math.toIntExact(Math.round(width)));
             columnHelper.setColBestFit(column, true);
         }
+    }
+
+    /**
+     * Set the extra width added to the best-fit column width (default 0.0).
+     * <p>
+     *     Only applied to auto-sized columns.
+     * </p>
+     * @param arbitraryExtraWidth the extra width added to the best-fit column width
+     * @since 5.4.1
+     */
+    public void setArbitraryExtraWidth(final double arbitraryExtraWidth) {
+        this.arbitraryExtraWidth = arbitraryExtraWidth;
+    }
+
+    /**
+     * Get the extra width added to the best-fit column width.
+     * <p>
+     *     Only applied to auto-sized columns.
+     * </p>
+     * @return the extra width added to the best-fit column width
+     * @since 5.4.0
+     */
+    public double getArbitraryExtraWidth() {
+        return arbitraryExtraWidth;
     }
 
     /**

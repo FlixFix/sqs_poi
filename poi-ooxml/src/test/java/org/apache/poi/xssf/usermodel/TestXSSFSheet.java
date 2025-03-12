@@ -241,6 +241,26 @@ public final class TestXSSFSheet extends BaseTestXSheet {
         }
     }
 
+    @Test
+    void autoSizeColumnWithArbitraryExtraWidth() throws IOException {
+        try (XSSFWorkbook workbook = new XSSFWorkbook()) {
+            XSSFSheet sheet = workbook.createSheet("Sheet 1");
+            XSSFCell cell = sheet.createRow(0).createCell(13);
+            cell.setCellValue("test");
+            sheet.autoSizeColumn(13);
+            final int size1 = sheet.getColumnWidth(13);
+
+            sheet.setArbitraryExtraWidth(10.0);
+            sheet.autoSizeColumn(13);
+            final int size2 = sheet.getColumnWidth(13);
+
+            assertEquals(size1 + 10, size2);
+
+            ColumnHelper columnHelper = sheet.getColumnHelper();
+            CTCol col = columnHelper.getColumn(13, false);
+            assertTrue(col.getBestFit());
+        }
+    }
 
     @Test
     void setCellComment() throws IOException {
