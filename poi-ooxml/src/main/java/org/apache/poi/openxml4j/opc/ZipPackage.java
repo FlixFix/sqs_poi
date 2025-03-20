@@ -673,7 +673,7 @@ public final class ZipPackage extends OPCPackage {
             LOG.atDebug().log("Save content types part");
             if (!this.contentTypeManager.save(zos)) {
                 throw new OpenXML4JRuntimeException(
-                    "Fail to save: content types part");
+                    "Failed to save: content types part");
             }
 
             // Save package relationships part.
@@ -682,7 +682,7 @@ public final class ZipPackage extends OPCPackage {
                     PackagingURIHelper.PACKAGE_RELATIONSHIPS_ROOT_PART_NAME,
                     zos)) {
                 throw new OpenXML4JRuntimeException(
-                    "Fail to save: package relationships part");
+                    "Failed to save: package relationships part");
             }
 
             // Save parts.
