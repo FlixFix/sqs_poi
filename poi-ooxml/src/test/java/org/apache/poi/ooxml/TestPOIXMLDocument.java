@@ -136,8 +136,7 @@ public final class TestPOIXMLDocument {
                 // see {@link org.apache.poi.openxml4j.opc.ZipPackage#saveImpl(java.io.OutputStream)}
                 OpenXML4JRuntimeException e = assertThrows(OpenXML4JRuntimeException.class, () -> doc.write(out),
                     "Should not be able to write to an output stream that has been closed.");
-                assertTrue(e.getMessage().matches("Fail to save: an error occurs while saving the package : " +
-                    "The part .+ failed to be saved in the stream with marshaller .+"));
+                assertEquals("Failed to save: content types part", e.getMessage());
 
                 // Should not be able to write a document that has been closed
                 doc.close();
