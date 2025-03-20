@@ -104,7 +104,7 @@ public final class ZipPartMarshaller implements PartMarshaller {
             PackagePartName relationshipPartName = PackagingURIHelper
                     .getRelationshipPartName(part.getPartName());
 
-            marshallRelationshipPart(part.getRelationships(),
+            return marshallRelationshipPart(part.getRelationships(),
                     relationshipPartName, zos);
         }
 

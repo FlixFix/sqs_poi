@@ -632,7 +632,7 @@ public final class ZipPackage extends OPCPackage {
      *
      * @param outputStream
      *            The stream use to save this package.
-     *
+     * @throws OpenXML4JRuntimeException if there is an error while saving the package.
      * @see #save(OutputStream)
      */
     @Override
@@ -671,13 +671,19 @@ public final class ZipPackage extends OPCPackage {
 
             // Save content type part.
             LOG.atDebug().log("Save content types part");
-            this.contentTypeManager.save(zos);
+            if (!this.contentTypeManager.save(zos)) {
+                throw new OpenXML4JRuntimeException(
+                    "Fail to save: content types part");
+            }
 
             // Save package relationships part.
             LOG.atDebug().log("Save package relationships");
-            ZipPartMarshaller.marshallRelationshipPart(this.getRelationships(),
+            if (!ZipPartMarshaller.marshallRelationshipPart(this.getRelationships(),
                     PackagingURIHelper.PACKAGE_RELATIONSHIPS_ROOT_PART_NAME,
-                    zos);
+                    zos)) {
+                throw new OpenXML4JRuntimeException(
+                    "Fail to save: package relationships part");
+            }
 
             // Save parts.
             for (PackagePart part : getParts()) {
