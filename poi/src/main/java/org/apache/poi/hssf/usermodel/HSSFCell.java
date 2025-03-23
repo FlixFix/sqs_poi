@@ -55,6 +55,7 @@ import org.apache.poi.ss.usermodel.RichTextString;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.ss.util.CellReference;
 import org.apache.poi.ss.util.NumberToTextConverter;
+import org.apache.poi.util.LocaleUtil;
 
 /**
  * High level representation of a cell in a row of a spreadsheet.
@@ -1020,8 +1021,6 @@ public class HSSFCell extends CellBase {
         _sheet.getSheet().setActiveCellCol(col);
     }
 
-    private static final DataFormatter DATA_FORMATTER = new DataFormatter();
-
     /**
      * Returns a string representation of the cell
      *
@@ -1045,8 +1044,14 @@ public class HSSFCell extends CellBase {
             case FORMULA:
                 return getCellFormula();
             case NUMERIC:
+                if (DateUtil.isCellDateFormatted(this)) {
+                    DataFormatter df = new DataFormatter();
+                    df.setUseCachedValuesForFormulaCells(true);
+                    return df.formatCellValue(this);
+                }
+                return Double.toString(getNumericCellValue());
             case STRING:
-                return DATA_FORMATTER.formatCellValue(this);
+                return getRichStringCellValue().toString();
             default:
                 return "Unknown Cell Type: " + getCellType();
         }

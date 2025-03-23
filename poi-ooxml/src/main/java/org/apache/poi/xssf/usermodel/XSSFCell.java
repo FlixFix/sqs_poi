@@ -49,6 +49,7 @@ import org.apache.poi.ss.util.CellUtil;
 import org.apache.poi.util.Beta;
 import org.apache.poi.util.ExceptionUtil;
 import org.apache.poi.util.Internal;
+import org.apache.poi.util.LocaleUtil;
 import org.apache.poi.xssf.model.CalculationChain;
 import org.apache.poi.xssf.model.SharedStringsTable;
 import org.apache.poi.xssf.model.StylesTable;
@@ -924,8 +925,6 @@ public final class XSSFCell extends CellBase {
         }
     }
 
-    private static final DataFormatter DATA_FORMATTER = new DataFormatter();
-
     /**
      * Returns a string representation of the cell
      * <p>
@@ -938,8 +937,14 @@ public final class XSSFCell extends CellBase {
     public String toString() {
         switch (getCellType()) {
             case NUMERIC:
+                if (DateUtil.isCellDateFormatted(this)) {
+                    DataFormatter df = new DataFormatter();
+                    df.setUseCachedValuesForFormulaCells(true);
+                    return df.formatCellValue(this);
+                }
+                return Double.toString(getNumericCellValue());
             case STRING:
-                return DATA_FORMATTER.formatCellValue(this);
+                return getRichStringCellValue().toString();
             case FORMULA:
                 return getCellFormula();
             case BLANK:

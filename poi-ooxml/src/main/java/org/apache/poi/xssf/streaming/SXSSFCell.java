@@ -721,8 +721,6 @@ public class SXSSFCell extends CellBase {
     }
 //end of interface implementation
 
-    private static final DataFormatter DATA_FORMATTER = new DataFormatter();
-
     /**
      * Returns a string representation of the cell
      * <p>
@@ -743,8 +741,14 @@ public class SXSSFCell extends CellBase {
             case FORMULA:
                 return getCellFormula();
             case NUMERIC:
+                if (DateUtil.isCellDateFormatted(this)) {
+                    DataFormatter df = new DataFormatter();
+                    df.setUseCachedValuesForFormulaCells(true);
+                    return df.formatCellValue(this);
+                }
+                return Double.toString(getNumericCellValue());
             case STRING:
-                return DATA_FORMATTER.formatCellValue(this);
+                return getRichStringCellValue().toString();
             default:
                 return "Unknown Cell Type: " + getCellType();
         }
