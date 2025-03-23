@@ -55,7 +55,6 @@ import org.apache.poi.ss.usermodel.RichTextString;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.ss.util.CellReference;
 import org.apache.poi.ss.util.NumberToTextConverter;
-import org.apache.poi.util.LocaleUtil;
 
 /**
  * High level representation of a cell in a row of a spreadsheet.

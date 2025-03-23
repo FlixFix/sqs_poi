@@ -49,7 +49,6 @@ import org.apache.poi.ss.util.CellUtil;
 import org.apache.poi.util.Beta;
 import org.apache.poi.util.ExceptionUtil;
 import org.apache.poi.util.Internal;
-import org.apache.poi.util.LocaleUtil;
 import org.apache.poi.xssf.model.CalculationChain;
 import org.apache.poi.xssf.model.SharedStringsTable;
 import org.apache.poi.xssf.model.StylesTable;
