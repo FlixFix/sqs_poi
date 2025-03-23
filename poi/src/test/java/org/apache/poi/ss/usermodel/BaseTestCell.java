@@ -365,6 +365,9 @@ public abstract class BaseTestCell {
             dateStyle.setDataFormat(formatId);
             r.getCell(7).setCellStyle(dateStyle);
 
+            // null rich text
+            r.createCell(8).setCellValue(factory.createRichTextString(null)); // blank
+
             assertEquals("FALSE", r.getCell(0).toString(), "Boolean");
             assertEquals("TRUE", r.getCell(1).toString(), "Boolean");
             assertEquals("1.5", r.getCell(2).toString(), "Numeric");
@@ -375,6 +378,7 @@ public abstract class BaseTestCell {
             // toString on a date-formatted cell displays dates as dd-MMM-yyyy, which has locale problems with the month
             String dateCell1 = r.getCell(7).toString();
             assertEquals("2/2/10 0:00", dateCell1);
+            assertEquals("", r.getCell(8).toString(), "Blank");
 
             //Write out the file, read it in, and then check cell values
             try (Workbook wb2 = _testDataProvider.writeOutAndReadBack(wb1)) {
@@ -388,6 +392,7 @@ public abstract class BaseTestCell {
                 assertEquals("", r.getCell(6).toString(), "Blank");
                 String dateCell2 = r.getCell(7).toString();
                 assertEquals(dateCell1, dateCell2, "Date");
+                assertEquals("", r.getCell(8).toString(), "Blank");
             }
         }
     }
