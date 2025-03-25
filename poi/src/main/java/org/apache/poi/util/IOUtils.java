@@ -209,6 +209,27 @@ public final class IOUtils {
     }
 
     /**
+     * Reads up to {@code length} bytes from the input stream, and returns the bytes read.
+     *
+     * @param stream The byte stream of data to read.
+     * @param length The maximum length to read, use {@link Integer#MAX_VALUE} to read the stream
+     *               until EOF
+     * @param maxLength if the input is equal to/longer than {@code maxLength} bytes,
+     *                  then throw an {@link IOException} complaining about the length.
+     *                  use {@link Integer#MAX_VALUE} to disable the check - if {@link #setByteArrayMaxOverride(int)} is
+     *                  set then that max of that value and this maxLength is used
+     * @return A byte array with the read bytes.
+     * @throws IOException If reading data fails or EOF is encountered too early for the given length.
+     * @throws RecordFormatException If the requested length is invalid.
+     * @since POI 5.4.1
+     */
+    public static byte[] toByteArray(InputStream stream, final long length, final int maxLength) throws IOException {
+        return toByteArray(stream,
+                length > Integer.MAX_VALUE ? Integer.MAX_VALUE : (int) length,
+                maxLength, true, length != Integer.MAX_VALUE);
+    }
+
+    /**
      * Reads the input stream, and returns the bytes read.
      *
      * @param stream The byte stream of data to read.

@@ -35,7 +35,7 @@ import org.apache.poi.util.TempFile;
  *  close this as soon as you can!
  * @see ZipInputStreamZipEntrySource#setThresholdBytesForTempFiles(int)
  */
-/* package */ class ZipArchiveFakeEntry extends ZipArchiveEntry implements Closeable {
+public final class ZipArchiveFakeEntry extends ZipArchiveEntry implements Closeable {
     private static final Logger LOG = PoiLogManager.getLogger(ZipArchiveFakeEntry.class);
 
     // how large a single entry in a zip-file should become at max
