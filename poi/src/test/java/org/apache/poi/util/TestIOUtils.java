@@ -110,8 +110,25 @@ final class TestIOUtils {
     }
 
     @Test
-    void testToByteArrayNegativeLength() {
-        assertThrows(RecordFormatException.class, () -> IOUtils.toByteArray(data123(), -1));
+    void testToByteArrayNegativeLength() throws IOException {
+        final byte[] array = new byte[]{1, 2, 3, 4, 5, 6, 7};
+        IOUtils.setByteArrayMaxOverride(30 * 1024 * 1024);
+        try (ByteArrayInputStream is = new ByteArrayInputStream(array)) {
+            assertArrayEquals(array, IOUtils.toByteArray(is, -1, 100));
+        } finally {
+            IOUtils.setByteArrayMaxOverride(-1);
+        }
+    }
+
+    @Test
+    void testToByteArrayNegativeLength2() throws IOException {
+        final byte[] array = new byte[]{1, 2, 3, 4, 5, 6, 7};
+        IOUtils.setByteArrayMaxOverride(30 * 1024 * 1024);
+        try (ByteArrayInputStream is = new ByteArrayInputStream(array)) {
+            assertArrayEquals(array, IOUtils.toByteArray(is, -1));
+        } finally {
+            IOUtils.setByteArrayMaxOverride(-1);
+        }
     }
 
     @Test

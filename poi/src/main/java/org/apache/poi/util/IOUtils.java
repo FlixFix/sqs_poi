@@ -248,15 +248,12 @@ public final class IOUtils {
 
     private static byte[] toByteArray(InputStream stream, final int length, final int maxLength,
                                       final boolean checkEOFException, final boolean isLengthKnown) throws IOException {
-        if (length < 0 || maxLength < 0) {
-            throw new RecordFormatException("Can't allocate an array of length < 0");
-        }
         final int derivedMaxLength = Math.max(maxLength, BYTE_ARRAY_MAX_OVERRIDE);
         if ((length != Integer.MAX_VALUE) || (derivedMaxLength != Integer.MAX_VALUE)) {
             checkLength(length, derivedMaxLength);
         }
 
-        final int derivedLen = isLengthKnown ? Math.min(length, derivedMaxLength) : derivedMaxLength;
+        final int derivedLen = isLengthKnown && length >= 0 ? Math.min(length, derivedMaxLength) : derivedMaxLength;
         final int byteArrayInitLen = calculateByteArrayInitLength(isLengthKnown, length, derivedMaxLength);
         final int internalBufferLen = DEFAULT_BUFFER_SIZE;
         try (UnsynchronizedByteArrayOutputStream baos = UnsynchronizedByteArrayOutputStream.builder().setBufferSize(byteArrayInitLen).get()) {
@@ -275,7 +272,7 @@ public final class IOUtils {
                 throwRecordTruncationException(derivedMaxLength);
             }
 
-            if (checkEOFException && derivedLen != Integer.MAX_VALUE && totalBytes < derivedLen) {
+            if (checkEOFException && length >= 0 && derivedLen != Integer.MAX_VALUE && totalBytes < derivedLen) {
                 throw new EOFException("unexpected EOF - expected len: " + derivedLen + " - actual len: " + totalBytes);
             }
 
