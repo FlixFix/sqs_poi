@@ -30,7 +30,6 @@ import java.util.List;
 
 import org.apache.poi.openxml4j.util.ZipArchiveFakeEntry;
 import org.apache.poi.openxml4j.util.ZipInputStreamZipEntrySource;
-import org.apache.poi.util.IOUtils;
 import org.apache.poi.util.Units;
 import org.apache.poi.xwpf.XWPFTestDataSamples;
 import org.apache.poi.xwpf.usermodel.XWPFRun.FontCharRange;
