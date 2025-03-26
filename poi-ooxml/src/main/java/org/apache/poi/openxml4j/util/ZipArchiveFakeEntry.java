@@ -44,7 +44,11 @@ public final class ZipArchiveFakeEntry extends ZipArchiveEntry implements Closea
     private static int MAX_ENTRY_SIZE = DEFAULT_MAX_ENTRY_SIZE;
 
     public static void setMaxEntrySize(int maxEntrySize) {
-        MAX_ENTRY_SIZE = maxEntrySize;
+        if(maxEntrySize < 0) {
+            MAX_ENTRY_SIZE = DEFAULT_MAX_ENTRY_SIZE;
+        } else {
+            MAX_ENTRY_SIZE = maxEntrySize;
+        }
     }
 
     public static int getMaxEntrySize() {
@@ -61,7 +65,7 @@ public final class ZipArchiveFakeEntry extends ZipArchiveEntry implements Closea
         final long entrySize = entry.getSize();
 
         final int threshold = ZipInputStreamZipEntrySource.getThresholdBytesForTempFiles();
-        if (threshold >= 0 && entrySize >= threshold) {
+        if (threshold >= 0 && (entrySize >= threshold || entrySize == -1)) {
             if (ZipInputStreamZipEntrySource.shouldEncryptTempFiles()) {
                 encryptedTempData = new EncryptedTempData();
                 try (OutputStream os = encryptedTempData.getOutputStream()) {
