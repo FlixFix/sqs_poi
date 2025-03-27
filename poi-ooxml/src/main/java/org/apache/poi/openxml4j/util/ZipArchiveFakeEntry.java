@@ -43,6 +43,11 @@ public final class ZipArchiveFakeEntry extends ZipArchiveEntry implements Closea
     private static final int DEFAULT_MAX_ENTRY_SIZE = 100_000_000;
     private static int MAX_ENTRY_SIZE = DEFAULT_MAX_ENTRY_SIZE;
 
+    /**
+     * Set the maximum size of a single entry in a zip-file.
+     * @param maxEntrySize number of bytes at which a zip entry is regarded as too large for holding in memory
+     *                     - defaults to 100_000_000 (approx 100Mb). A value of -1 means the default value is used.
+     */
     public static void setMaxEntrySize(int maxEntrySize) {
         if(maxEntrySize < 0) {
             MAX_ENTRY_SIZE = DEFAULT_MAX_ENTRY_SIZE;
@@ -52,7 +57,8 @@ public final class ZipArchiveFakeEntry extends ZipArchiveEntry implements Closea
     }
 
     public static int getMaxEntrySize() {
-       return MAX_ENTRY_SIZE;
+        final int ioMaxSize = IOUtils.getByteArrayMaxOverride();
+        return ioMaxSize < 0 ? MAX_ENTRY_SIZE : Math.min(MAX_ENTRY_SIZE, ioMaxSize);
     }
 
     private byte[] data;

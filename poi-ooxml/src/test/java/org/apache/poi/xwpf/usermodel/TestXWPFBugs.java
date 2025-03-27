@@ -30,6 +30,7 @@ import java.util.List;
 
 import org.apache.poi.openxml4j.util.ZipArchiveFakeEntry;
 import org.apache.poi.openxml4j.util.ZipInputStreamZipEntrySource;
+import org.apache.poi.util.IOUtils;
 import org.apache.poi.util.Units;
 import org.apache.poi.xwpf.XWPFTestDataSamples;
 import org.apache.poi.xwpf.usermodel.XWPFRun.FontCharRange;
@@ -356,6 +357,13 @@ class TestXWPFBugs {
             assertEquals(expectedParagraphs, doc.getParagraphs().size());
         } finally {
             ZipArchiveFakeEntry.setMaxEntrySize(-1);
+        }
+        // test again with smaller byte array max
+        IOUtils.setByteArrayMaxOverride(30 * 1024 * 1024);
+        try (XWPFDocument doc = XWPFTestDataSamples.openSampleDocument("bug69628.docx")) {
+            assertEquals(expectedParagraphs, doc.getParagraphs().size());
+        } finally {
+            IOUtils.setByteArrayMaxOverride(-1);
         }
         // test again but temp files enabled
         ZipInputStreamZipEntrySource.setThresholdBytesForTempFiles(1000);

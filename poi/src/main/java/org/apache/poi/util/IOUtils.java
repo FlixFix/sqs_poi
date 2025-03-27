@@ -108,6 +108,14 @@ public final class IOUtils {
     }
 
     /**
+     * @return The maximum number of bytes that should be possible to be allocated in one step.
+     * @since 5.4.1
+     */
+    public static int getByteArrayMaxOverride() {
+        return BYTE_ARRAY_MAX_OVERRIDE;
+    }
+
+    /**
      * Peeks at the first 8 bytes of the stream. Returns those bytes, but
      *  with the stream unaffected. Requires a stream that supports mark/reset,
      *  or a PushbackInputStream. If the stream has &gt;0 but &lt;8 bytes,
