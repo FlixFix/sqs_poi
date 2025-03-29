@@ -51,14 +51,8 @@ jobs:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       run: ./gradlew build jacocoTestReport sonar --info --no-daemon
 
-    - name: Debug JaCoCo report directory
-      run: |
-        echo "Working dir: $(pwd)"
-        ls -lah build/reports/jacoco/test
-        find . -name jacocoTestReport.xml
-
     - name: Send coverage report to DeepSource
-      run: ./bin/deepsource report --analyzer test-coverage --key java --value-file build/reports/jacoco/test/jacocoTestReport.xml
+      run: ./bin/deepsource report --analyzer test-coverage --key java --value-file poi/build/reports/jacoco/test/jacocoTestReport.xml
       env:
         DEEPSOURCE_DSN: ${{ secrets.DEEPSOURCE_DSN }}
 
