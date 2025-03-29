@@ -51,8 +51,28 @@ jobs:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       run: ./gradlew build jacocoTestReport sonar --info --no-daemon
 
-    #- name: Send coverage report to DeepSource
-    #  run: ./bin/deepsource report --analyzer test-coverage --key java --value-file poi/build/reports/jacoco/test/jacocoTestReport.xml
-    #  env:
-    #    DEEPSOURCE_DSN: ${{ secrets.DEEPSOURCE_DSN }}
+    - name: Send poi coverage report to DeepSource
+      run: ./bin/deepsource report --analyzer test-coverage --key java --value-file poi/build/reports/jacoco/test/jacocoTestReport.xml
+      env:
+        DEEPSOURCE_DSN: ${{ secrets.DEEPSOURCE_DSN }}
+        
+    - name: Send poi examples coverage report to DeepSource
+      run: ./bin/deepsource report --analyzer test-coverage --key java --value-file poi-examples/build/reports/jacoco/test/jacocoTestReport.xml
+      env:
+        DEEPSOURCE_DSN: ${{ secrets.DEEPSOURCE_DSN }}
+        
+    - name: Send poi excelant coverage report to DeepSource
+      run: ./bin/deepsource report --analyzer test-coverage --key java --value-file poi-excelant/examples/build/reports/jacoco/test/jacocoTestReport.xml
+      env:
+        DEEPSOURCE_DSN: ${{ secrets.DEEPSOURCE_DSN }}
+
+    - name: Send poi integration coverage report to DeepSource
+      run: ./bin/deepsource report --analyzer test-coverage --key java --value-file poi-integration/examples/build/reports/jacoco/test/jacocoTestReport.xml
+      env:
+        DEEPSOURCE_DSN: ${{ secrets.DEEPSOURCE_DSN }}
+
+    - name: Send poi scratchpad coverage report to DeepSource
+      run: ./bin/deepsource report --analyzer test-coverage --key java --value-file poi-scratchpad/examples/build/reports/jacoco/test/jacocoTestReport.xml
+      env:
+        DEEPSOURCE_DSN: ${{ secrets.DEEPSOURCE_DSN }}
 
