@@ -62,17 +62,23 @@ jobs:
         DEEPSOURCE_DSN: ${{ secrets.DEEPSOURCE_DSN }}
         
     - name: Send poi excelant coverage report to DeepSource
-      run: ./bin/deepsource report --analyzer test-coverage --key java --value-file poi-excelant/examples/build/reports/jacoco/test/jacocoTestReport.xml
+      run: ./bin/deepsource report --analyzer test-coverage --key java --value-file poi-excelant/build/reports/jacoco/test/jacocoTestReport.xml
       env:
         DEEPSOURCE_DSN: ${{ secrets.DEEPSOURCE_DSN }}
 
     - name: Send poi integration coverage report to DeepSource
-      run: ./bin/deepsource report --analyzer test-coverage --key java --value-file poi-integration/examples/build/reports/jacoco/test/jacocoTestReport.xml
+      run: ./bin/deepsource report --analyzer test-coverage --key java --value-file poi-integration/build/reports/jacoco/test/jacocoTestReport.xml
       env:
         DEEPSOURCE_DSN: ${{ secrets.DEEPSOURCE_DSN }}
 
     - name: Send poi scratchpad coverage report to DeepSource
-      run: ./bin/deepsource report --analyzer test-coverage --key java --value-file poi-scratchpad/examples/build/reports/jacoco/test/jacocoTestReport.xml
+      run: ./bin/deepsource report --analyzer test-coverage --key java --value-file poi-scratchpad/build/reports/jacoco/test/jacocoTestReport.xml
       env:
         DEEPSOURCE_DSN: ${{ secrets.DEEPSOURCE_DSN }}
+
+    - name: Upload coverage to Codacy
+      uses: codacy/codacy-coverage-reporter-action@v1
+      with:
+        project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
+        coverage-reports: '**/jacocoTestReport.xml'
 
