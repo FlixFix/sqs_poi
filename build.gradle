@@ -795,29 +795,6 @@ tasks.withType(Tar).configureEach {
     archiveExtension = 'tgz'
 }
 
-task jacocoRootReport(type: JacocoReport) {
-    dependsOn subprojects.test
-
-    executionData fileTree(dir: '.', include: '**/build/jacoco/test.exec')
-
-    def sourceDirs = files(subprojects.collect {
-        file("${it.projectDir}/src/main/java")
-    })
-
-    def classDirs = files(subprojects.collect {
-        file("${it.buildDir}/classes/java/main")
-    })
-
-    sourceDirectories.setFrom(sourceDirs)
-    classDirectories.setFrom(classDirs)
-
-    reports {
-        xml.required = true
-        xml.outputLocation = file("$buildDir/reports/jacoco/test/jacocoTestReport.xml")
-        html.required = true
-    }
-}
-
 distributions {
     src {
         contents {
