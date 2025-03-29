@@ -46,6 +46,11 @@ sonar {
     property "sonar.projectKey", "flixfix_sqs-poi"
     property "sonar.organization", "flixfix"
     property "sonar.host.url", "https://sonarcloud.io"
+   // add test report paths as configured in test section
+   // the plugin seems to not detect our non-standard build-layout
+   // the Gradle run will report an invalid directory for 'ooxml-schema', but it seems to still work fine
+   property "sonar.junit.reportPaths", "$projectDir/build/test-results/test"
+   property "sonar.coverage.jacoco.xmlReportPaths", "$projectDir/build/reports/jacoco/test/jacocoTestReport.xml"
   }
 }
 
